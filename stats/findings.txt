@@ -1,0 +1,2 @@
+lowest pitch in txt files: Sol3 -> 191
+highest pitch in txt files: Do7 -> 372

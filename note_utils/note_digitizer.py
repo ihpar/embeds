@@ -37,11 +37,11 @@ class NoteDigitizer:
         idx = 2
         idy = 1
         idn = 1
-        self.__sharp_dictionary[0] = Note('rest', '', '')
+        self.__sharp_dictionary[0] = Note('es', '', '')
         self.__sharp_dictionary[1] = Note('do', 0, '')
 
-        self.__flat_dictionary[0] = Note('rest', '', '')
-        self.__natural_dictionary[0] = Note('rest', '', '')
+        self.__flat_dictionary[0] = Note('es', '', '')
+        self.__natural_dictionary[0] = Note('es', '', '')
 
         for octave_no in range(0, 9):
             # sharps
