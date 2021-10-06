@@ -1,3 +1,6 @@
+from typing import Tuple
+
+
 class Note:
     """Encapsulates necessary details related to a TMM note.
 
@@ -23,11 +26,26 @@ class Note:
 
         self.name = root + str(octave) + accidental
 
-    def parse_note_str(self, note_str: str):
-        accidental_symbols = ["b", "#"]
-        if len(note_str) >= 2 and note_str[-2] in accidental_symbols:
-            # note has an accidental symbol
-            pass
+    @staticmethod
+    def parse_note_str(note_str: str) -> Tuple[str, int, str, int]:
+        accidental_amount = 0
+        accidental_direction = None
+        note_body = note_str
+
+        if "b" in note_str:  # note has a flat accidental
+            accidental_direction = "b"
+        elif "#" in note_str:  # note has a sharp accidental
+            accidental_direction = "#"
+
+        if accidental_direction:
+            accidental_index = note_str.find(accidental_direction) + 1
+            accidental_amount = int(note_str[accidental_index:])
+            note_body = note_str[:accidental_index-1]
+
+        octave_no = int(note_body[-1])
+        note_body = note_body[:-1]
+
+        return note_body, octave_no, accidental_direction, accidental_amount
 
     def __str__(self) -> str:
         return self.name

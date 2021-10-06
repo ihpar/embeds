@@ -2,12 +2,14 @@ import numpy as np
 from pathlib import Path
 from note_utils.note_digitizer import NoteDigitizer
 from reader_utils.txt_reader import TxtReader
+from note_utils.note_translator import NoteTranslator
 
 
 def main():
-    nd = NoteDigitizer()
-    print(nd)
 
+    nd = NoteDigitizer()
+    # print(nd)
+    """
     glob_mini, glob_maxi = 1000, -1
     txt_reader = TxtReader()
     txt_path = Path("data/SymbTr/txt")
@@ -21,6 +23,11 @@ def main():
 
     print(glob_mini, nd.get_note_by_num(glob_mini))
     print(glob_maxi, nd.get_note_by_num(glob_maxi))
+    """
+    nt = NoteTranslator()
+
+    print("="*20)
+    print(nt.name_to_int("mi3#5"), nt.name_to_int("fa3#1"))
 
 
 if __name__ == "__main__":
