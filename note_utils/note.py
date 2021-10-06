@@ -23,6 +23,12 @@ class Note:
 
         self.name = root + str(octave) + accidental
 
+    def parse_note_str(self, note_str: str):
+        accidental_symbols = ["b", "#"]
+        if len(note_str) >= 2 and note_str[-2] in accidental_symbols:
+            # note has an accidental symbol
+            pass
+
     def __str__(self) -> str:
         return self.name
 
