@@ -5,7 +5,7 @@ class NoteDigitizer:
     """Handles the conversions between the textual representations of TMM pitches and their integer IDs.
     """
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.__alphabet = ['do', 're', 'mi', 'fa', 'sol', 'la', 'si']
         self.__flat_alphabet = ['re', 'mi', 'fa', 'sol', 'la', 'si', 'do']
         self.__intervals = [9, 9, 4, 9, 9, 9, 4]
@@ -33,7 +33,7 @@ class NoteDigitizer:
 
         self.__build_self()
 
-    def __build_self(self):
+    def __build_self(self) -> None:
         idx = 2
         idy = 1
         idn = 1
@@ -85,7 +85,7 @@ class NoteDigitizer:
             self.__r_sharp_dictionary[v.name] = k
             self.__r_flat_dictionary[self.__flat_dictionary[k].name] = k
 
-    def __str__(self):
+    def __str__(self) -> str:
         str_rep = []
 
         for k, v in self.__sharp_dictionary.items():
@@ -99,60 +99,54 @@ class NoteDigitizer:
 
         return "\n".join(str_rep)
 
-    def get_num_by_name(self, note_name):
+    def get_num_by_name(self, note_name: str) -> int:
         """Returns the numeric Id of a textual TMM pitch.
 
         Args:
             note_name (str): textual representation of TMM pitch
 
         Returns:
-            list: [flat_index, sharp_index, natural_index, is_found]
+            note_num (int): note's numeric ID, or None
 
         Examples:
             >>> get_num_by_name("la4#5")
-            [-1, 258, -1, True]
+            258
 
             >>> get_num_by_name("la4#11")
-            [-1, -1, -1, False]
+            None
         """
-        res = [-1, -1, -1, False]
+        note_num = None
         if note_name in self.__r_flat_dictionary:
-            res[0] = self.__r_flat_dictionary[note_name]
-            res[3] = True
-        if note_name in self.__r_sharp_dictionary:
-            res[1] = self.__r_sharp_dictionary[note_name]
-            res[3] = True
-        if note_name in self.__r_natural_dictionary:
-            res[2] = self.__r_natural_dictionary[note_name]
-            res[3] = True
+            note_num = self.__r_flat_dictionary[note_name]
+        elif note_name in self.__r_sharp_dictionary:
+            note_num = self.__r_sharp_dictionary[note_name]
+        elif note_name in self.__r_natural_dictionary:
+            note_num = self.__r_natural_dictionary[note_name]
 
-        return res
+        return note_num
 
-    def get_note_by_num(self, note_num):
+    def get_note_by_num(self, note_num: int) -> Note:
         """Returns the textual representation of a TMM pitch w.r.t its ID.
 
         Args:
             note_num (int): ID of a TMM pitch
 
         Returns:
-            list: [Note_flat_repr, Note_sharp_repr, Note_natural_repr, is_found]
+            note (Note): Note object, or None
 
         Examples:
             >>> get_note_by_num(253)
-            ["si4b9", "sol4#9", "la4", True]
+            Note("si", 4, "b9")
 
             >>> get_note_by_num(-5)
-            [False, False, False, False]
+            None
         """
-        res = [False, False, False, False]
-        if note_num in self.__flat_dictionary:
-            res[0] = self.__flat_dictionary[note_num]
-            res[3] = True
-        if note_num in self.__sharp_dictionary:
-            res[1] = self.__sharp_dictionary[note_num]
-            res[3] = True
+        note = None
         if note_num in self.__natural_dictionary:
-            res[2] = self.__natural_dictionary[note_num]
-            res[3] = True
+            note = self.__natural_dictionary[note_num]
+        elif note_num in self.__flat_dictionary:
+            note = self.__flat_dictionary[note_num]
+        elif note_num in self.__sharp_dictionary:
+            note = self.__sharp_dictionary[note_num]
 
-        return res
+        return note

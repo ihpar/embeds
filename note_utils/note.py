@@ -10,7 +10,7 @@ class Note:
       name (str): Full note name. Ex: "la4b5"
     """
 
-    def __init__(self, root, octave, accidental):
+    def __init__(self, root, octave, accidental) -> None:
         self.root_note = root
         self.octave = octave
         self.accidental = accidental
@@ -23,8 +23,8 @@ class Note:
 
         self.name = root + str(octave) + accidental
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.name
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return self.name
