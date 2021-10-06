@@ -79,42 +79,47 @@ class NoteDigitizer:
             self.__r_sharp_dictionary[v.name] = k
             self.__r_flat_dictionary[self.__flat_dictionary[k].name] = k
 
-    def print_self(self):
+    def __str__(self):
+        str_rep = []
+
         for k, v in self.__sharp_dictionary.items():
             if k in self.__natural_dictionary:
-                print(str(k) + '\t' + v.name + '\t' + self.__flat_dictionary[k].name + '\t' +
-                      self.__natural_dictionary[k].name)
+                str_rep.append(str(k) + '\t' + v.name + '\t' +
+                               self.__flat_dictionary[k].name + '\t' +
+                               self.__natural_dictionary[k].name)
             else:
-                print(str(k) + '\t' + v.name + '\t' +
-                      self.__flat_dictionary[k].name)
+                str_rep.append(str(k) + '\t' + v.name + '\t' +
+                               self.__flat_dictionary[k].name)
+
+        return "\n".join(str_rep)
 
     def get_num_by_name(self, note_name):
-        ret = [-1, -1, -1, False]
+        res = [-1, -1, -1, False]
         if note_name in self.__r_flat_dictionary:
-            ret[0] = self.__r_flat_dictionary[note_name]
-            ret[3] = True
+            res[0] = self.__r_flat_dictionary[note_name]
+            res[3] = True
         if note_name in self.__r_sharp_dictionary:
-            ret[1] = self.__r_sharp_dictionary[note_name]
-            ret[3] = True
+            res[1] = self.__r_sharp_dictionary[note_name]
+            res[3] = True
         if note_name in self.__r_natural_dictionary:
-            ret[2] = self.__r_natural_dictionary[note_name]
-            ret[3] = True
+            res[2] = self.__r_natural_dictionary[note_name]
+            res[3] = True
 
-        return ret
+        return res
 
     def get_note_by_num(self, num):
-        ret = [False, False, False, False]
+        res = [False, False, False, False]
         if num in self.__flat_dictionary:
-            ret[0] = self.__flat_dictionary[num]
-            ret[3] = True
+            res[0] = self.__flat_dictionary[num]
+            res[3] = True
         if num in self.__sharp_dictionary:
-            ret[1] = self.__sharp_dictionary[num]
-            ret[3] = True
+            res[1] = self.__sharp_dictionary[num]
+            res[3] = True
         if num in self.__natural_dictionary:
-            ret[2] = self.__natural_dictionary[num]
-            ret[3] = True
+            res[2] = self.__natural_dictionary[num]
+            res[3] = True
 
-        return ret
+        return res
 
     class Note:
         def __init__(self, root, octave, accidental):

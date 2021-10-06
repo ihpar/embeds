@@ -1,9 +1,11 @@
 import numpy as np
 import pandas as pd
+from note_utils.note_digitizer import NoteDigitizer
 
 
 def main():
-    print(pd.__version__)
+    nd = NoteDigitizer()
+    print(nd)
 
 
 if __name__ == "__main__":
