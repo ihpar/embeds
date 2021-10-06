@@ -5,7 +5,8 @@ from note_utils.note_digitizer import NoteDigitizer
 
 def main():
     nd = NoteDigitizer()
-    print(nd)
+    note = nd.get_num_by_name("la4#1")
+    print(note)
 
 
 if __name__ == "__main__":
