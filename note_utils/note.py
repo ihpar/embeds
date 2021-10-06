@@ -28,6 +28,22 @@ class Note:
 
     @staticmethod
     def parse_note_str(note_str: str) -> Tuple[str, int, str, int]:
+        """Parses the textual representation of a TMM pitch and returns its properties.
+
+        Args:
+            note_str (str): Note's textual representation.
+
+        Returns:
+            note_body (str): Note's origin pitch,
+            octave_no (int): Note's octave number,
+            accidental_direction (str): "b" or "#",
+            accidental_amount (int): The amount of note's accidental.
+
+        Examples:
+            >>> parse_note_str("la5#4")
+            ("la", 5, "#", 4)
+        """
+
         accidental_amount = 0
         accidental_direction = None
         note_body = note_str

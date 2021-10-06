@@ -2,6 +2,9 @@ from note_utils.note import Note
 
 
 class NoteTranslator:
+    """Handles the conversions between the textual representations of TMM pitches and their integer IDs.
+    """
+
     def __init__(self) -> None:
         self.__octave_modulus = 53
         self.__lowest_octave = 3
@@ -16,6 +19,19 @@ class NoteTranslator:
                               zip(self.__notes, self.__comma_indices)}
 
     def name_to_int(self, note_name: str) -> int:
+        """Returns the numeric Id of a textual TMM pitch.
+
+        Args:
+            note_name (str): Textual representation of TMM pitch.
+
+        Returns:
+            Note's numeric ID (int).
+
+        Examples:
+            >>> get_num_by_name("fa3#1")
+            25
+        """
+
         if note_name in ["es", "rest"]:
             return self.__rest_index
 
@@ -29,6 +45,19 @@ class NoteTranslator:
             acci_amt
 
     def int_to_name(self, note_int: int) -> str:
+        """Returns the textual representation of a TMM pitch w.r.t. its ID.
+
+        Args:
+            note_int (int): TMM pitch ID.
+
+        Returns:
+            Note's textual representation (str).
+
+        Examples:
+            >>> int_to_name(25)
+            "fa3#1"
+        """
+
         if note_int == self.__rest_index:
             return "es"
 

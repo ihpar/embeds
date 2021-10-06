@@ -6,28 +6,14 @@ from note_utils.note_translator import NoteTranslator
 
 
 def main():
-
-    nd = NoteDigitizer()
-    # print(nd)
-    """
-    glob_mini, glob_maxi = 1000, -1
+    nt = NoteTranslator()
     txt_reader = TxtReader()
+
     txt_path = Path("data/SymbTr/txt")
     all_files = list(txt_path.glob("*.txt"))
+
     for file in all_files:
-        mini, maxi = txt_reader.read_txt(file, nd)
-        if mini < glob_mini:
-            glob_mini = mini
-        if maxi > glob_maxi:
-            glob_maxi = maxi
-
-    print(glob_mini, nd.get_note_by_num(glob_mini))
-    print(glob_maxi, nd.get_note_by_num(glob_maxi))
-    """
-    nt = NoteTranslator()
-
-    print("="*20)
-    print(nt.name_to_int("mi3#5"), nt.name_to_int("fa3#1"))
+        txt_reader.read_txt(file, nt)
 
 
 if __name__ == "__main__":
