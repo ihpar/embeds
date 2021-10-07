@@ -1,6 +1,14 @@
+total num of txt files = 2200
+total number of notes in txt files = 881082
+
+-------------------------------------
+
+By note digitizer:
 lowest pitch in txt files: Sol3 -> 191
 highest pitch in txt files: Do7 -> 372
 
 -------------------------------------
+
+By note translator:
 min note number = 1(rest)
 max note number = 214
