@@ -67,4 +67,4 @@ class Note:
         return self.name
 
     def __repr__(self) -> str:
-        return self.name
+        return "Note(" + self.name + ")"

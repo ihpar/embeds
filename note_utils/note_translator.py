@@ -41,7 +41,7 @@ class NoteTranslator:
             acci_amt = -1 * acci_amt
 
         return self.__note_to_int[body] + \
-            (octave - self.__lowest_octave) * self.__octave_modulus + \
+            ((octave - self.__lowest_octave) * self.__octave_modulus) + \
             acci_amt
 
     def int_to_name(self, note_int: int) -> str:

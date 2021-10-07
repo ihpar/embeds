@@ -8,10 +8,10 @@ class TxtReader:
     """Reads txt formatted SymbTr files.
     """
 
-    def __init__(self) -> None:
-        pass
+    def __init__(self, note_translator: NoteTranslator) -> None:
+        self.__note_translator = note_translator
 
-    def read_txt(self, file_path: str, note_translator: NoteTranslator) -> List[int]:
+    def read_txt(self, file_path: str) -> List[int]:
         """Reads txt formatted SymbTr files and returns all the notes' IDs.
 
         Args:
@@ -27,5 +27,6 @@ class TxtReader:
 
         txt_df = pd.read_csv(file_path, delimiter="\t")
         txt_df.dropna(subset=["Nota53"], inplace=True)
-        return [note_translator.get_num_by_name(note.lower())
+
+        return [self.__note_translator.name_to_int(note.lower())
                 for note in txt_df["Nota53"]]
