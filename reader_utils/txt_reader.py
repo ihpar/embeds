@@ -15,7 +15,7 @@ class TxtReader:
         """Reads txt formatted SymbTr files and returns all the notes' IDs.
 
         Args:
-            file_path (int): Path of the target txt file.
+            file_path (str): Path of the target txt file.
 
         Returns:
             Note's textual representation (str).

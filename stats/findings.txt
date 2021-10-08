@@ -12,3 +12,4 @@ highest pitch in txt files: Do7 -> 372
 By note translator:
 min note number = 1(rest)
 max note number = 214
+number of total unique pitches = 112 (see pitches_dict.txt)
