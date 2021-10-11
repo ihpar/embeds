@@ -4,9 +4,10 @@ from note_utils.pitch_dictionary import PitchDictionary
 
 
 def main():
-    p_dict = PitchDictionary(
-        Path("dataset_objects/pitches_dict.txt"))
-    print(p_dict.get_str_from_int(1))
+    # create_full_corpus("dataset_objects/pitches_dict.txt",
+    #                    "data/SymbTr/txt", "dataset_objects/full_corpus")
+    fc = read_full_corpus("dataset_objects/full_corpus")
+    print(len(fc))
 
 
 if __name__ == "__main__":
