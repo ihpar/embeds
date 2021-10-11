@@ -3,14 +3,17 @@ from note_utils.note_translator import NoteTranslator
 
 
 class PitchDictionary:
-    def __init__(self, pitch_dict_path: Path) -> None:
+    """Handles the conversions between the textual representations of TMM pitches and their integer IDs for training the model.
+    """
+
+    def __init__(self, pitch_dict_path: str) -> None:
         self.__vocabulary = None
         self.__unk_str = "<unk>"
         self.__note_str_to_int = {}
         self.__note_int_to_str = {}
         self.__note_translator = NoteTranslator()
 
-        with pitch_dict_path.open(mode="r") as p_d_file:
+        with Path(pitch_dict_path).open(mode="r") as p_d_file:
             self.__vocabulary = [line.rstrip().split(":")[1]
                                  for line in p_d_file.readlines()]
 

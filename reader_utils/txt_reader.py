@@ -34,10 +34,11 @@ class TxtReader:
             raise TypeError("self.__note_translator is not set yet")
 
         txt_df = pd.read_csv(file_path, delimiter="\t")
-        txt_df.dropna(subset=["Nota53"], inplace=True)
+        txt_df_notes = txt_df["Nota53"]
+        txt_df_notes.dropna(inplace=True)
+        txt_df_notes = txt_df_notes.str.lower()
 
         if as_names:
-            return [note.lower() for note in txt_df["Nota53"]]
+            return txt_df_notes.tolist()
 
-        return [self.__note_translator.name_to_int(note.lower())
-                for note in txt_df["Nota53"]]
+        return txt_df_notes.map(lambda x: self.__note_translator.name_to_int(x)).tolist()

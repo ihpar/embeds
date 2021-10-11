@@ -22,7 +22,7 @@ def create_pitch_dictionary(pitc_dict_file_path: str) -> None:
     txt_reader = TxtReader(nt)
 
     txt_path = Path("data/SymbTr/txt")
-    all_files = sorted(list(txt_path.glob("*.txt")))
+    all_files = list(txt_path.glob("*.txt"))
     unique_pitches = set()
 
     for file in all_files:
@@ -39,7 +39,7 @@ def create_pitch_dictionary(pitc_dict_file_path: str) -> None:
         pitches_file.write("\n".join(unique_pitches_dict))
 
 
-def create_full_corpus(pitc_dict_file_path: str, src_files_dir: str, target_file_path: str) -> None:
+def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str, target_file_path: str) -> None:
     """Creates a pitch dictionary from txt formatted SymbTr files.
 
     Args:
@@ -54,10 +54,10 @@ def create_full_corpus(pitc_dict_file_path: str, src_files_dir: str, target_file
                             "data/SymbTr/txt",
                             "dataset_objects/full_corpus")
     """
-    p_dict = PitchDictionary(Path(pitc_dict_file_path))
+    p_dict = PitchDictionary(pitc_dict_file_path)
 
-    txt_path = Path(src_files_dir)
-    all_files = sorted(list(txt_path.glob("*.txt")))
+    txt_path = Path(symbtr_files_dir)
+    all_files = list(txt_path.glob("*.txt"))
 
     nt = NoteTranslator()
     txt_reader = TxtReader(nt)
