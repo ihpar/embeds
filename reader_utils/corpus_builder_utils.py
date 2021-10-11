@@ -4,6 +4,9 @@ from note_utils.pitch_dictionary import PitchDictionary
 from reader_utils.txt_reader import TxtReader
 from note_utils.note_translator import NoteTranslator
 import pickle
+import functools
+import operator
+from collections import Counter
 
 
 def create_pitch_dictionary(pitc_dict_file_path: str) -> None:
@@ -86,3 +89,13 @@ def read_full_corpus(corpus_path: str) -> List[List[int]]:
     """
     with Path(corpus_path).open(mode="rb") as corpus_file:
         return pickle.load(corpus_file)
+
+
+def count_pitches():
+    """A script to count all pitches in the full corpus."""
+    p_dict = PitchDictionary("dataset_objects/pitches_dict.txt")
+    corpus = read_full_corpus("dataset_objects/full_corpus")
+    flat_corpus = functools.reduce(operator.iconcat, corpus, [])
+    flat_corpus_strs = [p_dict.get_str_from_int(n) for n in flat_corpus]
+    counts = Counter(flat_corpus_strs)
+    print(counts.items())
