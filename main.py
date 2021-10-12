@@ -9,8 +9,8 @@ def main():
     pd = PitchDictionary("dataset_objects/pitches_dict.txt")
 
     vocab_size = pd.get_vocabulary_size()
-    window_size = 2
-    num_ns = 4
+    window_size = 4
+    num_ns = 5
     embedding_dim = 32
     embedding_layer_name = "n2v_embedding"
 
@@ -25,16 +25,16 @@ def main():
 
     vocab = pd.get_vocabulary()
     weights = n2v.get_layer(embedding_layer_name).get_weights()[0]
-    out_v = io.open('vectors.tsv', 'w', encoding='utf-8')
-    out_m = io.open('metadata.tsv', 'w', encoding='utf-8')
+    vectors_file = io.open('vectors.tsv', 'w', encoding='utf-8')
+    metadata_file = io.open('metadata.tsv', 'w', encoding='utf-8')
 
     for index, word in enumerate(vocab):
         vec = weights[index]
-        out_v.write('\t'.join([str(x) for x in vec]) + "\n")
-        out_m.write(word + "\n")
+        vectors_file.write('\t'.join([str(x) for x in vec]) + "\n")
+        metadata_file.write(word + "\n")
 
-    out_v.close()
-    out_m.close()
+    vectors_file.close()
+    metadata_file.close()
 
 
 if __name__ == "__main__":

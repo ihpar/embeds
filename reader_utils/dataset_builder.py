@@ -3,7 +3,7 @@ import pickle
 import tensorflow as tf
 import tqdm
 from pathlib import Path
-from typing import List, Tuple
+from typing import List
 from tensorflow.python.framework.ops import Tensor
 SEED = 42
 AUTOTUNE = tf.data.AUTOTUNE
@@ -57,18 +57,18 @@ class DatasetBuilder:
         contexts = np.array(contexts)[:, :, 0]
         labels = np.array(labels)
 
-        BATCH_SIZE = 1024
-        BUFFER_SIZE = 10000
         dataset = tf.data.Dataset.from_tensor_slices(
             ((targets, contexts), labels))
 
+        BATCH_SIZE = 1024
+        BUFFER_SIZE = 10000
         dataset = dataset.shuffle(BUFFER_SIZE).batch(
             BATCH_SIZE, drop_remainder=True)
 
         dataset = dataset.cache().prefetch(buffer_size=AUTOTUNE)
         return dataset
 
-    def create_positive_skip_grams(self, song: List[int], vocab_size: int, window_size: int) -> List[Tuple]:
+    def create_positive_skip_grams(self, song: List[int], vocab_size: int, window_size: int):
         positive_skip_grams, _ = tf.keras.preprocessing.sequence.skipgrams(
             song,
             vocabulary_size=vocab_size,
@@ -77,7 +77,7 @@ class DatasetBuilder:
 
         return positive_skip_grams
 
-    def create_negative_samples(self, context_class: Tensor, num_ns: int, vocab_size: int) -> Tensor:
+    def create_negative_samples(self, context_class: Tensor, num_ns: int, vocab_size: int):
         negative_sampling_candidates, _, _ = tf.random.log_uniform_candidate_sampler(
             true_classes=context_class,
             num_true=1,
