@@ -1,4 +1,5 @@
 from pathlib import Path
+from typing import List
 from note_utils.note_translator import NoteTranslator
 
 
@@ -22,6 +23,23 @@ class PitchDictionary:
         for i, v in enumerate(self.__vocabulary):
             self.__note_str_to_int[v] = i
             self.__note_int_to_str[i] = v
+
+    def get_vocabulary(self) -> List[str]:
+        return self.__vocabulary
+
+    def get_vocabulary_size(self) -> int:
+        """Returns the vocabulary size of the whole corpus.
+
+        Args:
+            None.
+        Returns:
+            The size of the corpus vocabulary.
+
+        Examples:
+        >>> get_vocabulary_size()
+        113
+        """
+        return len(self.__vocabulary)
 
     def get_int_from_str(self, note_name: str) -> int:
         """Converts note string to note ID.
