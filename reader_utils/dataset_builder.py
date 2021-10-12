@@ -1,7 +1,7 @@
 import numpy as np
 import pickle
 import tensorflow as tf
-import tqdm
+from tqdm import tqdm
 from pathlib import Path
 from typing import List
 from tensorflow.python.framework.ops import Tensor
@@ -26,7 +26,7 @@ class DatasetBuilder:
         # ((target note), (1 * positive context + num_ns * negative samples)) -> (1, num_ns * 0)
         targets, contexts, labels = [], [], []
 
-        for song in tqdm.tqdm(songs):
+        for song in tqdm(songs):
             positive_skip_grams = self.create_positive_skip_grams(
                 song, vocab_size, window_size)
 
