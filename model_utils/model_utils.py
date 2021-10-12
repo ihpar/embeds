@@ -1,4 +1,3 @@
-import tensorflow as tf
 from tensorflow.keras.losses import CategoricalCrossentropy
 from model_utils.note_to_vec import Note2Vec
 
