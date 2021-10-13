@@ -1,6 +1,9 @@
 import numpy as np
 import pickle
 import tensorflow as tf
+import functools
+import operator
+from collections import Counter
 from tensorflow.python.data.ops.dataset_ops import Dataset
 from tqdm import tqdm
 from pathlib import Path
@@ -32,11 +35,10 @@ class DatasetBuilder:
         Examples:
             >>> dataset = build_word_to_vec_dataset(123, 4, 10, 1)
         """
-        songs = None
-        with Path(self.__corpus_path).open(mode="rb") as corpus_file:
-            songs = pickle.load(corpus_file)
+        songs = self.get_full_corpus()
 
-        songs = [songs[i] for i in range(0, len(songs), skip_amount)]
+        if skip_amount > 1:
+            songs = [songs[i] for i in range(0, len(songs), skip_amount)]
 
         # dataset => (((num_targets,), (num_targets, num_ns+1)), (num_targets, num_ns+1))
         # ((target note), (1 * positive context + num_ns * negative samples)) -> (1, num_ns * 0)
@@ -105,9 +107,17 @@ class DatasetBuilder:
 
         return negative_sampling_candidates
 
-    def get_full_corpus(self) -> List[List[int]]:
+    def get_full_corpus(self, drop_limit: int = 0) -> List[List[int]]:
         songs = None
         with Path(self.__corpus_path).open(mode="rb") as corpus_file:
             songs = pickle.load(corpus_file)
 
-        return songs
+        if not drop_limit:
+            return songs
+
+        flattened_corpus = functools.reduce(operator.iconcat, songs, [])
+        counts = Counter(flattened_corpus)
+        dropped_notes = [note for note, count in counts.items()
+                         if count < drop_limit]
+
+        print(dropped_notes)
