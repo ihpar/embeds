@@ -90,3 +90,17 @@ class PitchDictionary:
 
         # return note string from self.__note_int_to_str
         return self.__note_int_to_str[note_id]
+
+    def get_unknown_id(self) -> int:
+        """Returns the ID of an unknown pitch.
+
+        Args:
+            None
+        Returns:
+            ID of the <unk>.
+
+        Examples:
+        >>> get_unknown_id()
+        0
+        """
+        return self.__note_str_to_int[self.__unk_str]

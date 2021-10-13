@@ -9,6 +9,7 @@ from tqdm import tqdm
 from pathlib import Path
 from typing import List
 from tensorflow.python.framework.ops import Tensor
+from note_utils.pitch_dictionary import PitchDictionary
 SEED = 42
 AUTOTUNE = tf.data.AUTOTUNE
 
@@ -19,7 +20,7 @@ class DatasetBuilder:
     def __init__(self, corpus_path: str) -> None:
         self.__corpus_path = corpus_path
 
-    def build_word_to_vec_dataset(self, vocab_size: int, window_size: int, num_ns: int, skip_amount: int = 1) -> Dataset:
+    def build_word_to_vec_dataset(self, vocab_size: int, window_size: int, num_ns: int, skip_amount: int = 1, drop_limit: int = 0) -> Dataset:
         """Builds the w2v dataset from the full corpus.
 
         Args:
@@ -28,6 +29,8 @@ class DatasetBuilder:
             vocab_size (int): Path of the target txt file.
             skip_amount (int, optional): Defaults to 1. 
                 If set to True, note names are returned as strings instead of IDs.
+            drop_limit (int, optional): Defaults to 0. 
+                If set to a positive number N, notes with frequency < N are dropped from the dataset.
 
         Returns:
             Dataset object to be consumed by tf model.
@@ -35,7 +38,7 @@ class DatasetBuilder:
         Examples:
             >>> dataset = build_word_to_vec_dataset(123, 4, 10, 1)
         """
-        songs = self.get_full_corpus()
+        songs = self.get_full_corpus(drop_limit=drop_limit)
 
         if skip_amount > 1:
             songs = [songs[i] for i in range(0, len(songs), skip_amount)]
@@ -120,4 +123,12 @@ class DatasetBuilder:
         dropped_notes = [note for note, count in counts.items()
                          if count < drop_limit]
 
-        print(dropped_notes)
+        pd = PitchDictionary("dataset_objects/pitches_dict.txt")
+        unk_id = pd.get_unknown_id()
+        print("UNK:", unk_id)
+
+        for song_index, song in enumerate(songs):
+            songs[song_index] = [
+                unk_id if note in dropped_notes else note for note in song]
+
+        return songs
