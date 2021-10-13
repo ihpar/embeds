@@ -1,6 +1,7 @@
 import numpy as np
 import pickle
 import tensorflow as tf
+from tensorflow.python.data.ops.dataset_ops import Dataset
 from tqdm import tqdm
 from pathlib import Path
 from typing import List
@@ -15,7 +16,22 @@ class DatasetBuilder:
     def __init__(self, corpus_path: str) -> None:
         self.__corpus_path = corpus_path
 
-    def build_word_to_vec_dataset(self, vocab_size: int, window_size: int, num_ns: int, skip_amount: int = 1):
+    def build_word_to_vec_dataset(self, vocab_size: int, window_size: int, num_ns: int, skip_amount: int = 1) -> Dataset:
+        """Builds the w2v dataset from the full corpus.
+
+        Args:
+            vocab_size (int): Path of the target txt file.
+            vocab_size (int): Path of the target txt file.
+            vocab_size (int): Path of the target txt file.
+            skip_amount (int, optional): Defaults to 1. 
+                If set to True, note names are returned as strings instead of IDs.
+
+        Returns:
+            Dataset object to be consumed by tf model.
+
+        Examples:
+            >>> dataset = build_word_to_vec_dataset(123, 4, 10, 1)
+        """
         songs = None
         with Path(self.__corpus_path).open(mode="rb") as corpus_file:
             songs = pickle.load(corpus_file)
@@ -27,7 +43,7 @@ class DatasetBuilder:
         targets, contexts, labels = [], [], []
 
         for song in tqdm(songs):
-            positive_skip_grams = self.create_positive_skip_grams(
+            positive_skip_grams = self.__create_positive_skip_grams(
                 song, vocab_size, window_size)
 
             # Iterate over each positive skip-gram pair to produce training examples
@@ -36,7 +52,7 @@ class DatasetBuilder:
                 context_class = tf.expand_dims(
                     tf.constant([context_word], dtype="int64"), 1)
 
-                negative_sampling_candidates = self.create_negative_samples(
+                negative_sampling_candidates = self.__create_negative_samples(
                     context_class, num_ns, vocab_size)
 
                 # Build context and label vectors (for one target word)
@@ -68,7 +84,7 @@ class DatasetBuilder:
         dataset = dataset.cache().prefetch(buffer_size=AUTOTUNE)
         return dataset
 
-    def create_positive_skip_grams(self, song: List[int], vocab_size: int, window_size: int):
+    def __create_positive_skip_grams(self, song: List[int], vocab_size: int, window_size: int):
         positive_skip_grams, _ = tf.keras.preprocessing.sequence.skipgrams(
             song,
             vocabulary_size=vocab_size,
@@ -77,7 +93,7 @@ class DatasetBuilder:
 
         return positive_skip_grams
 
-    def create_negative_samples(self, context_class: Tensor, num_ns: int, vocab_size: int):
+    def __create_negative_samples(self, context_class: Tensor, num_ns: int, vocab_size: int):
         negative_sampling_candidates, _, _ = tf.random.log_uniform_candidate_sampler(
             true_classes=context_class,
             num_true=1,
@@ -88,3 +104,10 @@ class DatasetBuilder:
             name="negative_sampling")
 
         return negative_sampling_candidates
+
+    def get_full_corpus(self) -> List[List[int]]:
+        songs = None
+        with Path(self.__corpus_path).open(mode="rb") as corpus_file:
+            songs = pickle.load(corpus_file)
+
+        return songs

@@ -91,11 +91,23 @@ def read_full_corpus(corpus_path: str) -> List[List[int]]:
         return pickle.load(corpus_file)
 
 
-def count_pitches():
-    """A script to count all pitches in the full corpus."""
+def count_pitches(as_names: str = True) -> Counter:
+    """A script to count all pitches in the full corpus.
+
+    Args:
+        as_names (bool, optional): Defaults to True. 
+            If set to False, note IDs are returned as integers instead of names.
+    Returns:
+        Counts of all pitches in the corpus.
+
+    Examples:
+    >>> count_pitches()
+    dict_items([('do5', 93865), ('fa5', 45492), ..., ('la3#7', 4)])
+    """
     p_dict = PitchDictionary("dataset_objects/pitches_dict.txt")
     corpus = read_full_corpus("dataset_objects/full_corpus")
     flat_corpus = functools.reduce(operator.iconcat, corpus, [])
-    flat_corpus_strs = [p_dict.get_str_from_int(n) for n in flat_corpus]
-    counts = Counter(flat_corpus_strs)
-    print(counts.items())
+    if as_names:
+        flat_corpus = [p_dict.get_str_from_int(n) for n in flat_corpus]
+
+    return Counter(flat_corpus)
