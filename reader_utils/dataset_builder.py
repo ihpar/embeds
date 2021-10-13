@@ -125,7 +125,6 @@ class DatasetBuilder:
 
         pd = PitchDictionary("dataset_objects/pitches_dict.txt")
         unk_id = pd.get_unknown_id()
-        print("UNK:", unk_id)
 
         for song_index, song in enumerate(songs):
             songs[song_index] = [
