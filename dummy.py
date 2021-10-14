@@ -26,6 +26,10 @@ def clean_below_500():
             vec_f.write(vl + "\n")
 
 
+def cosine_similarity(v1, v2):
+    return np.dot(v1, v2) / (np.linalg.norm(v1) * np.linalg.norm(v2))
+
+
 def find_cos_similar(note_name):
     dir_path = "dataset_objects/dropped_500_vectors/"
     cleaned_meta_path = dir_path + "clean_metadata_ws4_ns10_ed16_ep20.tsv"
@@ -43,23 +47,21 @@ def find_cos_similar(note_name):
     max_sim = -1
     target_vec = vector_dict[note_name]
     closest_pitch = [None, None]
+    similarities = []
     for n, v in vector_dict.items():
         if n == note_name:
             continue
 
-        similarity = np.dot(target_vec, v) / \
-            (np.linalg.norm(target_vec) * np.linalg.norm(v))
+        similarity = cosine_similarity(target_vec, v)
+        similarities.append((n, similarity, v))
 
-        if similarity > max_sim:
-            max_sim = similarity
-            closest_pitch[0] = n
-            closest_pitch[1] = v
-
-    print(note_name, "=>", closest_pitch[0], ":", closest_pitch[1])
+    return sorted(similarities, key=lambda tup: tup[1], reverse=True)
 
 
 def main():
-    find_cos_similar("sol4#4")
+    similarities = find_cos_similar("do5")[:10]
+    for s in similarities:
+        print(s[0], s[1])
 
 
 if __name__ == "__main__":
