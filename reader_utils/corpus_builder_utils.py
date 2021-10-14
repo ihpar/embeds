@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List
+from typing import Any, List
 from note_utils.pitch_dictionary import PitchDictionary
 from reader_utils.txt_reader import TxtReader
 from note_utils.note_translator import NoteTranslator
@@ -111,3 +111,10 @@ def count_pitches(as_names: str = True) -> Counter:
         flat_corpus = [p_dict.get_str_from_int(n) for n in flat_corpus]
 
     return Counter(flat_corpus)
+
+
+def get_dropped_pitches(drop_limit: int, as_names: str = True) -> List[Any]:
+    """"""
+    counts = count_pitches(as_names=as_names)
+    return [note for note, count in counts.items()
+            if count < drop_limit]
