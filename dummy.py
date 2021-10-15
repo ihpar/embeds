@@ -72,20 +72,20 @@ def a_is_to_b_as_c_is_to(notes_a_b, note_c):
     if n_a not in vector_dict or n_b not in vector_dict or note_c not in vector_dict:
         return None
 
-    b_minus_a = vector_dict[n_b] - vector_dict[n_a]
+    a_minus_b = vector_dict[n_a] - vector_dict[n_b]
     vec_c = vector_dict[note_c]
     max_sim = -100
-    note_d = None
-    for n, v in vector_dict.items():
-        if n == note_c:
+    note_d_tup = None
+    for note_d, vec_d in vector_dict.items():
+        if note_d == note_c:
             continue
 
-        cos_sim = cosine_similarity(b_minus_a, (v - vec_c))
+        cos_sim = cosine_similarity(a_minus_b, (vec_c - vec_d))
         if cos_sim > max_sim:
             max_sim = cos_sim
-            note_d = (n, v)
+            note_d_tup = (note_d, max_sim, vec_d)
 
-    return note_d
+    return note_d_tup
 
 
 def main():
@@ -93,8 +93,16 @@ def main():
     for s in similarities:
         print(s[0], s[1])
 
-    n_d = a_is_to_b_as_c_is_to(("la4", "re5"), "re4")
-    print(n_d)
+    notes_a_b = ("la4", "do5")
+    note_c = notes_a_b[1]
+
+    for _ in range(10):
+        print("-"*100)
+        note_d_tup = a_is_to_b_as_c_is_to(notes_a_b, note_c)
+        print(notes_a_b[0], "=>", notes_a_b[1],
+              "as", note_c, "=>", note_d_tup[0], "sim:", note_d_tup[1])
+        notes_a_b = (note_c, note_d_tup[0])
+        note_c = notes_a_b[1]
 
 
 if __name__ == "__main__":
