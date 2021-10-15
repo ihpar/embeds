@@ -89,14 +89,14 @@ def a_is_to_b_as_c_is_to(notes_a_b, note_c):
 
 
 def main():
-    similarities = find_cos_similar("la4")[:5]
+    similarities = find_cos_similar("sol4")[:5]
     for s in similarities:
         print(s[0], s[1])
 
-    notes_a_b = ("la4", "do5")
+    notes_a_b = ("sol4", "re5")
     note_c = notes_a_b[1]
 
-    for _ in range(10):
+    for _ in range(20):
         print("-"*100)
         note_d_tup = a_is_to_b_as_c_is_to(notes_a_b, note_c)
         print(notes_a_b[0], "=>", notes_a_b[1],
