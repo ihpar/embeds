@@ -7,7 +7,7 @@ from collections import Counter
 from tensorflow.python.data.ops.dataset_ops import Dataset
 from tqdm import tqdm
 from pathlib import Path
-from typing import List
+from typing import Any, List, Union
 from tensorflow.python.framework.ops import Tensor
 from note_utils.pitch_dictionary import PitchDictionary
 SEED = 42
@@ -131,3 +131,7 @@ class DatasetBuilder:
                 unk_id if note in dropped_notes else note for note in song]
 
         return songs
+
+    def read_corpus_from_path(self, corpus_path: str) -> List[Union[int, str]]:
+        with Path(corpus_path).open(mode="rb") as corpus_file:
+            return pickle.load(corpus_file)

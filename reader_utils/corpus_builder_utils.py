@@ -42,13 +42,14 @@ def create_pitch_dictionary(pitc_dict_file_path: str) -> None:
         pitches_file.write("\n".join(unique_pitches_dict))
 
 
-def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str, target_file_path: str) -> None:
+def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str, target_file_path: str, is_raw: bool = False) -> None:
     """Creates a pitch dictionary from txt formatted SymbTr files.
 
     Args:
         pitc_dict_file_path (str): Path of the dictionary file to be created.
         src_files_dir (str): Path of the text corpus directory.
         target_file_path (str): Path of the target file for storing the full numeric corpus.
+        is_raw (bool, optional): Defaults to False. Corpus is created as note strings rather than note IDs when set True.
     Returns:
         None.
 
@@ -57,7 +58,9 @@ def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str, target_f
                             "data/SymbTr/txt",
                             "dataset_objects/full_corpus")
     """
-    p_dict = PitchDictionary(pitc_dict_file_path)
+    p_dict = None
+    if not is_raw:
+        p_dict = PitchDictionary(pitc_dict_file_path)
 
     txt_path = Path(symbtr_files_dir)
     all_files = list(txt_path.glob("*.txt"))
@@ -68,8 +71,9 @@ def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str, target_f
     full_corpus = []
     for file in all_files:
         notes = txt_reader.read_txt(file, as_names=True)
-        note_ids = [p_dict.get_int_from_str(note) for note in notes]
-        full_corpus.append(note_ids)
+        if not is_raw:
+            notes = [p_dict.get_int_from_str(note) for note in notes]
+        full_corpus.append(notes)
 
     with Path(target_file_path).open(mode="wb") as corpus_file:
         pickle.dump(full_corpus, corpus_file)
