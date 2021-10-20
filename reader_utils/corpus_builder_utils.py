@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import Any, List
 from note_utils.pitch_dictionary import PitchDictionary
+from note_utils.note import Note
 from reader_utils.txt_reader import TxtReader
 from note_utils.note_translator import NoteTranslator
 import pickle
@@ -42,7 +43,9 @@ def create_pitch_dictionary(pitc_dict_file_path: str) -> None:
         pitches_file.write("\n".join(unique_pitches_dict))
 
 
-def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str, target_file_path: str, is_raw: bool = False) -> None:
+def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str,
+                       target_file_path: str, is_raw: bool = False,
+                       as_pitch_classes: bool = False) -> None:
     """Creates a pitch dictionary from txt formatted SymbTr files.
 
     Args:
@@ -50,6 +53,7 @@ def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str, target_f
         src_files_dir (str): Path of the text corpus directory.
         target_file_path (str): Path of the target file for storing the full numeric corpus.
         is_raw (bool, optional): Defaults to False. Corpus is created as note strings rather than note IDs when set True.
+        as_pitch_classes (bool, optional): Defaults to False. Corpus is created as pitch classes when set True.
     Returns:
         None.
 
@@ -73,6 +77,8 @@ def create_full_corpus(pitc_dict_file_path: str, symbtr_files_dir: str, target_f
         notes = txt_reader.read_txt(file, as_names=True)
         if not is_raw:
             notes = [p_dict.get_int_from_str(note) for note in notes]
+        if as_pitch_classes:
+            notes = [Note.convert_to_pitch_class(note) for note in notes]
         full_corpus.append(notes)
 
     with Path(target_file_path).open(mode="wb") as corpus_file:

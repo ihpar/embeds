@@ -42,7 +42,11 @@ class Note:
         Examples:
             >>> parse_note_str("la5#4")
             ("la", 5, "#", 4)
+            >>> parse_note_str("es")
+            ("es", None, None, 0)
         """
+        if note_str == "es":
+            return "es", None, None, 0
 
         accidental_amount = 0
         accidental_direction = None
@@ -62,6 +66,15 @@ class Note:
         note_body = note_body[:-1]
 
         return note_body, octave_no, accidental_direction, accidental_amount
+
+    @staticmethod
+    def convert_to_pitch_class(note_str: str) -> str:
+        note_body, _, accidental_direction, accidental_amount = Note.parse_note_str(
+            note_str)
+
+        if accidental_direction:
+            return note_body + accidental_direction + str(accidental_amount)
+        return note_body
 
     def __str__(self) -> str:
         return self.name
